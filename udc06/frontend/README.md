@@ -75,6 +75,8 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 docker build -t lopatnov/udc06f -f Dockerfile.dev .
 MSYS_NO_PATHCONV=1 docker run -p 3000:3000 -it --rm -w /app -v "/app/node_modules" -v "/$(pwd)":"/app" lopatnov/udc06f
 docker exec -it lopatnov/udc06f npm run test
+docker exec -it 74ad1ae891b0 sh
+docker attach 74ad1ae891b0
 ```
 
 ## Articles
