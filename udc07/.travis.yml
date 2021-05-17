@@ -1,0 +1,24 @@
+sudo: required
+language: generic
+services:
+  - docker
+
+before_install:
+  - docker build -t lopatnov/udc07 -f Dockerfile.dev .
+
+script:
+  - docker run -e CI=true lopatnov/udc07 npm run test -- --coverage
+
+deploy:
+  provider: elasticbeanstalk
+  access_key_id: "$AWS_ACCESS_KEY"
+  secret_access_key: "$AWS_SECRET_KEY"
+  region: "us-east-2"
+  app: "udc07f"
+  env: "udc07f-env"
+  bucket_name: "elasticbeanstalk-us-east-2-086645886004"
+  bucket_path: "udc07f"
+  #edge: true
+  #skip_cleanup: true
+  on:
+    branch: main
