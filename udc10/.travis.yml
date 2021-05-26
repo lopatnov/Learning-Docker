@@ -1,0 +1,21 @@
+services:
+  - docker
+
+before_install:
+  - docker build -t lopatnov/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run lopatnov/react-test npm test -- --coverage --watchAll=false
+
+after_success:
+  - docker build -t lopatnov/multi-client ./client
+  - docker build -t lopatnov/multi-nginx ./nginx
+  - docker build -t lopatnov/multi-server ./server
+  - docker build -t lopatnov/multi-worker ./worker
+  # Log in in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push them to docker hub
+  - docker push lopatnov/multi-client
+  - docker push lopatnov/multi-nginx
+  - docker push lopatnov/multi-server
+  - docker push lopatnov/multi-worker
